@@ -1,4 +1,4 @@
-from django.db.models import Count, F, ExpressionWrapper, IntegerField
+from django.db.models import Count, F
 from rest_framework import viewsets, pagination
 
 from cinema.models import (
@@ -7,7 +7,8 @@ from cinema.models import (
     CinemaHall,
     Movie,
     MovieSession,
-    Order, Ticket,
+    Order,
+    Ticket,
 )
 
 from cinema.serializers import (
@@ -30,21 +31,25 @@ from cinema.serializers import (
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    pagination_class = None
 
 
 class ActorViewSet(viewsets.ModelViewSet):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
+    pagination_class = None
 
 
 class CinemaHallViewSet(viewsets.ModelViewSet):
     queryset = CinemaHall.objects.all()
     serializer_class = CinemaHallSerializer
+    pagination_class = None
 
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+    pagination_class = None
 
     def get_queryset(self):
         queryset = self.queryset
@@ -78,6 +83,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = MovieSession.objects.all()
     serializer_class = MovieSessionSerializer
+    pagination_class = None
 
     def get_queryset(self):
         queryset = self.queryset
@@ -111,14 +117,9 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
         return MovieSessionSerializer
 
 
-class OrderPagination(pagination.PageNumberPagination):
-    page_size = 10
-
-
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
-    pagination_class = OrderPagination
 
     def get_queryset(self):
         queryset = self.queryset.filter(user=self.request.user)
@@ -140,6 +141,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 class TicketsViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.action == "list":
