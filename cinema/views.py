@@ -1,5 +1,8 @@
-from django.db.models import Count, F
-from rest_framework import viewsets, pagination
+from django.db.models import (
+    Count,
+    F,
+)
+from rest_framework import viewsets
 
 from cinema.models import (
     Genre,
@@ -8,7 +11,6 @@ from cinema.models import (
     Movie,
     MovieSession,
     Order,
-    Ticket,
 )
 
 from cinema.serializers import (
@@ -137,14 +139,3 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-class TicketsViewSet(viewsets.ModelViewSet):
-    queryset = Ticket.objects.all()
-    pagination_class = None
-
-    def get_serializer_class(self):
-        if self.action == "list":
-            return TicketListSerializer
-
-        return TicketSerializer
